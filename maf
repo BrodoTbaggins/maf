@@ -7,6 +7,10 @@ elif [ $# -gt 1 ]; then
   exit 2
 fi
 
+green=$'\e[1;32m'
+red=$'\e[1;31m'
+clear=$'\033[0m'
+
 mac_unformatted=$(echo "$1"| tr '[:upper:]' '[:lower:]' | sed 's/://g' | sed 's/-//g' | sed 's/\.//g' | tr -d [:f-z)
 
 if [ ${#mac_unformatted} -ne 12 ]; then
@@ -19,10 +23,6 @@ mac_hyphen=$(echo "$mac_unformatted" | sed 's/\(..\)/\1-/g;s/-$//' )
 mac_colon=$(echo "$mac_unformatted" | sed 's/\(..\)/\1:/g;s/:$//' )
 
 mac_period=$(echo "$mac_unformatted" | sed 's/\(....\)/\1./g;s/.$//' )
-
-green=$'\e[1;32m'
-red=$'\e[1;31m'
-clear=$'\033[0m'
 
 echo "Hyphen Notation: ${green}${mac_hyphen}${clear}"
 echo "Colon Notation:  ${green}$mac_colon${clear}"

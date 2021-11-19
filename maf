@@ -5,15 +5,17 @@
 if [ $# -lt 1 ]; then
   echo 1>&2 "$0: not enough arguments"
   exit 2
-elif [ $# -gt 1 ]; then
+elif [ $# -gt 2 ]; then
   echo 1>&2 "$0: too many arguments"
   exit 2
 fi
 
+format_mac_address () {
+
 #Color codes to use for the output
 green=$'\e[1;32m'
 red=$'\e[1;31m'
-clear=$'\033[0m'
+clear=$'\033[0m' 
 
 #Make the argument a hexadecimal string without special characters or characters g-z
 mac_unformatted=$(echo "$1"| tr '[:upper:]' '[:lower:]' | tr -dc '[:xdigit:]' | tr -d 'g-z')
@@ -29,7 +31,34 @@ mac_hyphen=$(echo "$mac_unformatted" | sed 's/\(..\)/\1-/g;s/-$//' )
 mac_colon=$(echo "$mac_unformatted" | sed 's/\(..\)/\1:/g;s/:$//' )
 mac_period=$(echo "$mac_unformatted" | sed 's/\(....\)/\1./g;s/.$//' )
 
+if [ $# -eq 1 ]; then
+
 #Output all of the notations
 echo "Hyphen Notation: ${green}${mac_hyphen}${clear}"
 echo "Colon Notation:  ${green}$mac_colon${clear}"
 echo "Period Notation: ${green}$mac_period${clear}"
+
+elif [ "$2" = "hyphen" ]; then
+
+#Output Hyphen Notation
+echo "Hyphen Notation: ${green}${mac_hyphen}${clear}"
+
+elif [ "$2" = "colon" ]; then
+
+#Output Colon Notation
+echo "Colon Notation:  ${green}$mac_colon${clear}"
+
+elif [ "$2" = "period" ]; then
+
+#Output Period Notation
+echo "Period Notation: ${green}$mac_period${clear}"
+
+else
+
+echo "Argument ${red}${2}${clear} is invalid"
+echo "Instead use ${green}hyphen${clear}, ${green}colon${clear} or ${green}period${clear}"
+fi
+}
+
+#Call the format_mac_address function
+format_mac_address $1 $2

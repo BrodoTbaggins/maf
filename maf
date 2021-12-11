@@ -2,13 +2,13 @@
 #By Austin Pack
 #Created 11/10/2021
 
-#if [ $# -lt 1 ]; then
-#  echo 1>&2 "$0: not enough arguments"
-#  exit 2
+if [ $# -lt 1 ]; then
+  echo 1>&2 "$0: not enough arguments"
+  exit 2
 #elif [ $# -gt 3 ]; then
 #  echo 1>&2 "$0: too many arguments"
 #  exit 2
-#fi
+fi
 
 #Loop to get opts
 while getopts ":i:o:f:" opt; do
@@ -44,8 +44,14 @@ mac_unformatted=$(echo "$1"| tr '[:upper:]' '[:lower:]' | tr -dc '[:xdigit:]' | 
 
 #If the mac is too short or too long the argument is invalid
 if [ ${#mac_unformatted} -ne 12 ]; then
-echo "Argument ${red}${1}${clear} is invalid"
-exit 128
+
+if [ $3 ]; then
+echo "$1 is not a valid mac address" >> $3
+return
+else
+echo "${red}${1}${clear} is not a valid mac address"
+return
+fi
 fi
 
 #Format the mac into the different notations
@@ -62,7 +68,7 @@ echo "Period Notation: ${green}$mac_period${clear}"
 #Hyphen Notation
 elif [ "$2" = "hyphen" ]; then
 if [ $3 ]; then
-echo mac_hyphen >> $3
+echo $mac_hyphen >> $3
 else
 echo "${green}${mac_hyphen}${clear}"
 fi
